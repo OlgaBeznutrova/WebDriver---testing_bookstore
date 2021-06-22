@@ -12,11 +12,11 @@ class BasePage:
         self.url = url
         self.browser.implicitly_wait = timeout
 
-    def is_disappeared(self, how, what, timeout=4):  # ожидаем пока элемент не исчезнет
+    def is_disappeared(self, how, what, timeout=4):
         try:
             WebDriverWait(self.browser, timeout, 1, TimeoutException). \
                 until_not(EC.presence_of_element_located((how, what)))
-        except TimeoutException:  # если время истекло, значит, элемент так и не исчез.  Возвращаем False
+        except TimeoutException:
             return False
         return True
 
@@ -27,26 +27,22 @@ class BasePage:
             return False
         return True
 
-    def is_not_element_present(self, how, what,
-                               timeout=4):  # ожидаем, пока элемент не появится. Если так и не появился - True
+    def is_not_element_present(self, how, what, timeout=4):
         try:
             WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
         except TimeoutException:
             return True
-
         return False
 
     def get_text_from_element(self, how, what):
         return self.browser.find_element(how, what).text
 
     def go_to_basket_page(self):
-        basket_link = self.browser.find_element(
-            *BasePageLocators.BASKET_LINK)  # факт перехода в корзину: нашли ссылку и перешли по ней
+        basket_link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
         basket_link.click()
 
     def go_to_login_page(self):
-        login_link = self.browser.find_element(
-            *BasePageLocators.LOGIN_LINK)  # факт перехода: нашли ссылку и перешли по ней
+        login_link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         login_link.click()
 
     def open(self):
@@ -57,12 +53,10 @@ class BasePage:
                                                                      " probably unauthorised user"
 
     def should_be_basket_link(self):
-        assert self.is_element_present(
-            *BasePageLocators.BASKET_LINK), "Basket link is not presented"  # проверяем, что ссылка на корзину вообще представлена на странице)
+        assert self.is_element_present(*BasePageLocators.BASKET_LINK), "Basket link is not presented"
 
     def should_be_login_link(self):
-        assert self.is_element_present(
-            *BasePageLocators.LOGIN_LINK), "Login link is not presented"  # проверяем, что ссылка на регистрацию вообще представлена на странице)
+        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
 
     def solve_quiz_and_get_code(self):
         alert = self.browser.switch_to.alert
